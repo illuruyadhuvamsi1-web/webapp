@@ -17,14 +17,19 @@ jobs:
     - name: Checkout source code
       uses: actions/checkout@v4
 
-    - name: verify azure credentials
+    - name: verify Azure Credentials
       run: |
-        if [ -z "${{ secrets.AZURE_CLIENT_ID }}" ]; then
-          echo "ERROR: AZURE_CLIENT_ID secret is not set!"
-          exit 1
+        if [ -z "${{ secrets.AZURE_CREDENTIALS }}" ]; then
+          echo "Azure credentials are not set. Please set the AZURE_CREDENTIALS secret.";
+          exit 1;
         else
-          echo "AZURE_CLIENT_ID secret is set"
+          echo "Azure credentials are set.";
         fi
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -36,12 +41,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Login to Azure using OIDC
-      uses: azure/login@v2
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
 
     - name: Deploy application to Azure Web App
       uses: azure/webapps-deploy@v3
