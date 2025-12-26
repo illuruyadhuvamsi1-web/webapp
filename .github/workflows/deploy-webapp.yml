@@ -6,7 +6,7 @@ on:
       - main
 
 permissions:
-  id-token: write      # REQUIRED for OIDC
+  id-token: write     
   contents: read
 
 jobs:
@@ -16,6 +16,15 @@ jobs:
     steps:
     - name: Checkout source code
       uses: actions/checkout@v4
+
+    - name: verify azure credentials
+      run: |
+        if [ -z "${{ secrets.AZURE_CLIENT_ID }}" ]; then
+          echo "ERROR: AZURE_CLIENT_ID secret is not set!"
+          exit 1
+        else
+          echo "AZURE_CLIENT_ID secret is set"
+        fi
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -37,5 +46,5 @@ jobs:
     - name: Deploy application to Azure Web App
       uses: azure/webapps-deploy@v3
       with:
-        app-name: sample-python-webapp-001   # CHANGE THIS
+        app-name: sample-python-webapp-001   
         package: .
