@@ -45,7 +45,9 @@ jobs:
         pip install -r requirements.txt
 
     - name: List Web Apps in Subscription
-      run: az webapp list --query '[].{name:name, resourceGroup:resourceGroup, location:location}' -o table
+      run: |
+        echo "Listing all Web Apps in resource group practice-rg..."
+        az webapp list --resource-group practice-rg --query '[].{name:name, location:location}' -o table
 
 
 
