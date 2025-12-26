@@ -1,4 +1,4 @@
-name: Deploy Python Web App to Azure using OIDC
+name: Deploy Python Web App to Azure
 
 on:
   push:
@@ -31,6 +31,9 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+    - name: Set Azure Subscription
+      run: az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
@@ -51,3 +54,4 @@ jobs:
       with:
         app-name: practicegithubwebapp  
         package: .
+        startup-command: gunicorn --bind 0.0.0.0:$PORT app:app
