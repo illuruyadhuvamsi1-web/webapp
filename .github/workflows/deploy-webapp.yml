@@ -49,5 +49,5 @@ jobs:
     - name: Deploy application to Azure Web App
       uses: azure/webapps-deploy@v3
       with:
-        app-name: githubtestappservice  
+        app-name: practicegithubwebapp  
         package: .
