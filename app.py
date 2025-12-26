@@ -4,7 +4,11 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return "Python Web App deployed to Azure using GitHub Actions"
+    return "Hello from Python Web App deployed via GitHub Actions 🚀"
+
+@app.route("/health")
+def health():
+    return "OK"
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)
