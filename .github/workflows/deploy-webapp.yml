@@ -6,37 +6,14 @@ on:
       - main
 
 permissions:
-  id-token: write    
+  id-token: write      # REQUIRED for OIDC
   contents: read
 
 jobs:
   deploy:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Update Azure CLI and install graph extension
-          run: |
-            echo "Updating Azure CLI and installing Microsoft Graph extension..."
-            az upgrade --yes
-          az extension add --name microsoft-graph --yes
-          echo "Ensuring jq is installed..."
-          sudo apt-get update && sudo apt-get install -y jq
-        shell: bash
+    runs-on: ubuntu-latest
+
     steps:
-    - name: Check for federated identity credentials
-      run: |
-        echo "Checking for federated identity credentials on Service Principal..."
-        FED_CREDS=$(az ad sp federated-credential list --id $AZURE_CLIENT_ID)
-        if [ "$(echo $FED_CREDS | jq length)" -eq 0 ]; then
-          echo "ERROR: No federated identity credentials found for Service Principal $AZURE_CLIENT_ID."
-          exit 1
-        else
-          echo "Federated identity credentials found. Proceeding with login."
-        fi
-      env:
-        AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-        AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-        AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        
     - name: Checkout source code
       uses: actions/checkout@v4
 
@@ -60,5 +37,5 @@ jobs:
     - name: Deploy application to Azure Web App
       uses: azure/webapps-deploy@v3
       with:
-        app-name: pythonwebapptest   
+        app-name: sample-python-webapp-001   # CHANGE THIS
         package: .
