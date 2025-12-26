@@ -11,13 +11,12 @@ permissions:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
-
+      runs-on: ubuntu-latest
       steps:
-      - name: Update Azure CLI and install graph extension
-        run: |
-          echo "Updating Azure CLI and installing Microsoft Graph extension..."
-          az upgrade --yes
+        - name: Update Azure CLI and install graph extension
+          run: |
+            echo "Updating Azure CLI and installing Microsoft Graph extension..."
+            az upgrade --yes
           az extension add --name microsoft-graph --yes
           echo "Ensuring jq is installed..."
           sudo apt-get update && sudo apt-get install -y jq
